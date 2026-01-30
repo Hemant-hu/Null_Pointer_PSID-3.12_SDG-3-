@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../api/api";
-
+import "./Doctor.css"
 const DoctorPage = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);

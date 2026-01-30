@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './NewPatient.css';
+import './Newpatient.css';
 import api from '../api/api';
+
 
 const NewPatient = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        Sex: '',
-        Age: '',
-        Arrival_mode: '',
-        Patients_number_per_hour: '',
-        Injury: '',
-        Chief_complain: '',
-        Mental: '',
-        Pain: '',
-        NRS_pain: '',
-        SBP: '',
-        DBP: '',
-        HR: '',
-        RR: '',
-        BT: '',
-        Saturation: ''
+        patientName: '',
+        age: '',
+        gender: '',
+        contactNumber: '',
+        emergencyContact: '',
+        address: '',
+        symptoms: '',
+        severity: 'medium',
+        vitals: {
+            bloodPressure: '',
+            temperature: '',
+            heartRate: '',
+            oxygenLevel: ''
+        },
+        medicalHistory: '',
+        allergies: '',
+        currentMedications: ''
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,6 +36,55 @@ const NewPatient = () => {
             ...prev,
             [name]: value
         }));
+    };
+
+    const handleVitalsChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            vitals: {
+                ...prev.vitals,
+                [name]: value
+            }
+        }));
+    };
+
+    // Calculate priority score
+    const calculatePriorityScore = () => {
+        let score = 50;
+
+        // Age factor
+        const age = parseInt(formData.age) || 0;
+        if (age > 60) score += 20;
+        if (age > 80) score += 10;
+
+        // Symptom severity
+        if (formData.severity === 'high') score += 40;
+        if (formData.severity === 'critical') score += 70;
+        if (formData.severity === 'low') score -= 20;
+
+        // Specific symptoms
+        const symptoms = formData.symptoms.toLowerCase();
+        if (symptoms.includes('chest')) score += 30;
+        if (symptoms.includes('breath')) score += 25;
+        if (symptoms.includes('bleed')) score += 35;
+        if (symptoms.includes('unconscious')) score += 50;
+
+        // Vitals factors
+        const hr = parseInt(formData.vitals.heartRate) || 80;
+        if (hr < 60 || hr > 100) score += 15;
+
+        const temp = parseFloat(formData.vitals.temperature) || 98.6;
+        if (temp > 100) score += 10;
+
+        const oxygen = parseInt(formData.vitals.oxygenLevel) || 98;
+        if (oxygen < 95) score += 20;
+        if (oxygen < 90) score += 30;
+
+        // Ensure score is between 0-200
+        score = Math.max(0, Math.min(200, score));
+
+        return Math.round(score);
     };
 
     const handleSubmit = async (e) => {
@@ -64,24 +116,27 @@ const NewPatient = () => {
         }
     };
 
+
     const handleNewRegistration = () => {
         setShowPriority(false);
         setFormData({
-            Sex: '',
-            Age: '',
-            Arrival_mode: '',
-            Patients_number_per_hour: '',
-            Injury: '',
-            Chief_complain: '',
-            Mental: '',
-            Pain: '',
-            NRS_pain: '',
-            SBP: '',
-            DBP: '',
-            HR: '',
-            RR: '',
-            BT: '',
-            Saturation: ''
+            patientName: '',
+            age: '',
+            gender: '',
+            contactNumber: '',
+            emergencyContact: '',
+            address: '',
+            symptoms: '',
+            severity: 'medium',
+            vitals: {
+                bloodPressure: '',
+                temperature: '',
+                heartRate: '',
+                oxygenLevel: ''
+            },
+            medicalHistory: '',
+            allergies: '',
+            currentMedications: ''
         });
     };
 
@@ -142,9 +197,9 @@ const NewPatient = () => {
                                     </h3>
                                     <p className="action-text">{getExpectedAction(priorityScore)}</p>
                                     <div className="patient-summary">
-                                        <p><strong>Chief Complain:</strong> {formData.Chief_complain}</p>
-                                        <p><strong>Age:</strong> {formData.Age} years</p>
-                                        <p><strong>Pain Level:</strong> {formData.NRS_pain}/10</p>
+                                        <p><strong>Patient:</strong> {formData.patientName}</p>
+                                        <p><strong>Age:</strong> {formData.age} years</p>
+                                        <p><strong>Symptoms:</strong> {formData.symptoms}</p>
                                     </div>
                                 </div>
                             </div>
@@ -206,32 +261,29 @@ const NewPatient = () => {
                         </h2>
                         <div className="form-grid">
                             <div className="form-group">
-                                <label htmlFor="Sex">
-                                    Sex <span className="required">*</span>
+                                <label htmlFor="patientName">
+                                    Full Name <span className="required">*</span>
                                 </label>
-                                <select
-                                    id="Sex"
-                                    name="Sex"
-                                    value={formData.Sex}
+                                <input
+                                    type="text"
+                                    id="patientName"
+                                    name="patientName"
+                                    value={formData.patientName}
                                     onChange={handleChange}
+                                    placeholder="Enter patient's full name"
                                     required
-                                >
-                                    <option value="">Select Sex</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
-                                </select>
+                                />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="Age">
+                                <label htmlFor="age">
                                     Age <span className="required">*</span>
                                 </label>
                                 <input
                                     type="number"
-                                    id="Age"
-                                    name="Age"
-                                    value={formData.Age}
+                                    id="age"
+                                    name="age"
+                                    value={formData.age}
                                     onChange={handleChange}
                                     placeholder="Age in years"
                                     min="0"
@@ -241,136 +293,120 @@ const NewPatient = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="Arrival_mode">
-                                    Arrival Mode <span className="required">*</span>
+                                <label htmlFor="gender">
+                                    Gender <span className="required">*</span>
                                 </label>
                                 <select
-                                    id="Arrival_mode"
-                                    name="Arrival_mode"
-                                    value={formData.Arrival_mode}
+                                    id="gender"
+                                    name="gender"
+                                    value={formData.gender}
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="">Select Arrival Mode</option>
-                                    <option value="walking">Walking</option>
-                                    <option value="ambulance">Ambulance</option>
-                                    <option value="wheelchair">Wheelchair</option>
-                                    <option value="stretcher">Stretcher</option>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                    <option value="prefer-not-to-say">Prefer not to say</option>
                                 </select>
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="Patients_number_per_hour">
-                                    Patients per Hour
+                                <label htmlFor="contactNumber">
+                                    Contact Number <span className="required">*</span>
                                 </label>
                                 <input
-                                    type="number"
-                                    id="Patients_number_per_hour"
-                                    name="Patients_number_per_hour"
-                                    value={formData.Patients_number_per_hour}
+                                    type="tel"
+                                    id="contactNumber"
+                                    name="contactNumber"
+                                    value={formData.contactNumber}
                                     onChange={handleChange}
-                                    placeholder="Number of patients"
-                                    min="0"
+                                    placeholder="10-digit mobile number"
+                                    pattern="[0-9]{10}"
+                                    required
                                 />
                             </div>
                         </div>
                     </div>
 
-                    {/* Medical Condition */}
+                    {/* Contact & Address */}
                     <div className="form-section">
                         <h2 className="section-title">
-                            <span className="section-icon">⚕️</span>
-                            Medical Condition
+                            <span className="section-icon">📞</span>
+                            Contact & Address
                         </h2>
                         <div className="form-grid">
                             <div className="form-group full-width">
-                                <label htmlFor="Injury">
-                                    Injury Type
+                                <label htmlFor="emergencyContact">
+                                    Emergency Contact <span className="required">*</span>
                                 </label>
-                                <select
-                                    id="Injury"
-                                    name="Injury"
-                                    value={formData.Injury}
+                                <input
+                                    type="tel"
+                                    id="emergencyContact"
+                                    name="emergencyContact"
+                                    value={formData.emergencyContact}
                                     onChange={handleChange}
-                                >
-                                    <option value="">Select Injury Type</option>
-                                    <option value="none">None</option>
-                                    <option value="blunt">Blunt Trauma</option>
-                                    <option value="penetrating">Penetrating Trauma</option>
-                                    <option value="burn">Burn</option>
-                                    <option value="fracture">Fracture</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group full-width">
-                                <label htmlFor="Chief_complain">
-                                    Chief Complain <span className="required">*</span>
-                                </label>
-                                <textarea
-                                    id="Chief_complain"
-                                    name="Chief_complain"
-                                    value={formData.Chief_complain}
-                                    onChange={handleChange}
-                                    placeholder="Describe the main complain in detail"
-                                    rows="3"
+                                    placeholder="Emergency contact number"
                                     required
                                 />
                             </div>
-
-                            <div className="form-group">
-                                <label htmlFor="Mental">
-                                    Mental Status
-                                </label>
-                                <select
-                                    id="Mental"
-                                    name="Mental"
-                                    value={formData.Mental}
+                            <div className="form-group full-width">
+                                <label htmlFor="address">Address</label>
+                                <textarea
+                                    id="address"
+                                    name="address"
+                                    value={formData.address}
                                     onChange={handleChange}
-                                >
-                                    <option value="">Select Status</option>
-                                    <option value="alert">Alert</option>
-                                    <option value="confused">Confused</option>
-                                    <option value="drowsy">Drowsy</option>
-                                    <option value="unresponsive">Unresponsive</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="Pain">
-                                    Pain Present
-                                </label>
-                                <select
-                                    id="Pain"
-                                    name="Pain"
-                                    value={formData.Pain}
-                                    onChange={handleChange}
-                                >
-                                    <option value="">Select</option>
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
-                                </select>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="NRS_pain">
-                                    NRS Pain (0-10)
-                                </label>
-                                <input
-                                    type="number"
-                                    id="NRS_pain"
-                                    name="NRS_pain"
-                                    value={formData.NRS_pain}
-                                    onChange={handleChange}
-                                    placeholder="0 to 10"
-                                    min="0"
-                                    max="10"
+                                    placeholder="Full residential address"
+                                    rows="3"
                                 />
                             </div>
                         </div>
                     </div>
 
-                    {/* Vital Signs */}
+                    {/* Medical Information */}
+                    <div className="form-section">
+                        <h2 className="section-title">
+                            <span className="section-icon">⚕️</span>
+                            Medical Information
+                        </h2>
+                        <div className="form-grid">
+                            <div className="form-group full-width">
+                                <label htmlFor="symptoms">
+                                    Symptoms <span className="required">*</span>
+                                </label>
+                                <textarea
+                                    id="symptoms"
+                                    name="symptoms"
+                                    value={formData.symptoms}
+                                    onChange={handleChange}
+                                    placeholder="Describe symptoms in detail"
+                                    rows="4"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="severity">
+                                    Severity Level <span className="required">*</span>
+                                </label>
+                                <select
+                                    id="severity"
+                                    name="severity"
+                                    value={formData.severity}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="low">Low (Non-urgent)</option>
+                                    <option value="medium">Medium (Standard)</option>
+                                    <option value="high">High (Urgent)</option>
+                                    <option value="critical">Critical (Emergency)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Vitals */}
                     <div className="form-section">
                         <h2 className="section-title">
                             <span className="section-icon">❤️</span>
@@ -378,87 +414,98 @@ const NewPatient = () => {
                         </h2>
                         <div className="form-grid">
                             <div className="form-group">
-                                <label htmlFor="SBP">SBP (mmHg)</label>
+                                <label htmlFor="bloodPressure">Blood Pressure</label>
                                 <input
-                                    type="number"
-                                    id="SBP"
-                                    name="SBP"
-                                    value={formData.SBP}
-                                    onChange={handleChange}
-                                    placeholder="Systolic BP"
-                                    min="50"
-                                    max="250"
+                                    type="text"
+                                    id="bloodPressure"
+                                    name="bloodPressure"
+                                    value={formData.vitals.bloodPressure}
+                                    onChange={handleVitalsChange}
+                                    placeholder="e.g., 120/80"
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="DBP">DBP (mmHg)</label>
+                                <label htmlFor="temperature">Temperature (°F)</label>
                                 <input
                                     type="number"
-                                    id="DBP"
-                                    name="DBP"
-                                    value={formData.DBP}
-                                    onChange={handleChange}
-                                    placeholder="Diastolic BP"
-                                    min="30"
-                                    max="150"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="HR">HR (BPM)</label>
-                                <input
-                                    type="number"
-                                    id="HR"
-                                    name="HR"
-                                    value={formData.HR}
-                                    onChange={handleChange}
-                                    placeholder="Heart Rate"
-                                    min="30"
-                                    max="200"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="RR">RR (breaths/min)</label>
-                                <input
-                                    type="number"
-                                    id="RR"
-                                    name="RR"
-                                    value={formData.RR}
-                                    onChange={handleChange}
-                                    placeholder="Respiratory Rate"
-                                    min="8"
-                                    max="40"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="BT">BT (°C)</label>
-                                <input
-                                    type="number"
-                                    id="BT"
-                                    name="BT"
-                                    value={formData.BT}
-                                    onChange={handleChange}
-                                    placeholder="Body Temperature"
-                                    min="30"
-                                    max="45"
+                                    id="temperature"
+                                    name="temperature"
+                                    value={formData.vitals.temperature}
+                                    onChange={handleVitalsChange}
+                                    placeholder="e.g., 98.6"
                                     step="0.1"
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="Saturation">Saturation (%)</label>
+                                <label htmlFor="heartRate">Heart Rate (BPM)</label>
                                 <input
                                     type="number"
-                                    id="Saturation"
-                                    name="Saturation"
-                                    value={formData.Saturation}
-                                    onChange={handleChange}
-                                    placeholder="O2 Saturation"
-                                    min="50"
+                                    id="heartRate"
+                                    name="heartRate"
+                                    value={formData.vitals.heartRate}
+                                    onChange={handleVitalsChange}
+                                    placeholder="e.g., 72"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="oxygenLevel">Oxygen Level (%)</label>
+                                <input
+                                    type="number"
+                                    id="oxygenLevel"
+                                    name="oxygenLevel"
+                                    value={formData.vitals.oxygenLevel}
+                                    onChange={handleVitalsChange}
+                                    placeholder="e.g., 98"
+                                    min="0"
                                     max="100"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Medical History */}
+                    <div className="form-section">
+                        <h2 className="section-title">
+                            <span className="section-icon">📖</span>
+                            Medical History
+                        </h2>
+                        <div className="form-grid">
+                            <div className="form-group full-width">
+                                <label htmlFor="medicalHistory">Past Medical History</label>
+                                <textarea
+                                    id="medicalHistory"
+                                    name="medicalHistory"
+                                    value={formData.medicalHistory}
+                                    onChange={handleChange}
+                                    placeholder="Any previous medical conditions"
+                                    rows="3"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="allergies">Allergies</label>
+                                <input
+                                    type="text"
+                                    id="allergies"
+                                    name="allergies"
+                                    value={formData.allergies}
+                                    onChange={handleChange}
+                                    placeholder="e.g., Penicillin, Pollen"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="currentMedications">Current Medications</label>
+                                <input
+                                    type="text"
+                                    id="currentMedications"
+                                    name="currentMedications"
+                                    value={formData.currentMedications}
+                                    onChange={handleChange}
+                                    placeholder="e.g., Aspirin, Insulin"
                                 />
                             </div>
                         </div>

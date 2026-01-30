@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Stethoscope, 
-  Activity, 
-  Users, 
-  Clock, 
-  MapPin, 
-  Phone, 
+import {
+  Stethoscope,
+  Activity,
+  Users,
+  Clock,
+  MapPin,
+  Phone,
   Mail,
   ArrowRight,
   Shield,
@@ -29,7 +29,7 @@ const Home = () => {
           </div>
           <h1>Advanced Hospital <span className="gradient-text">Management System</span></h1>
           <p className="hero-subtitle">
-            Streamline patient care with intelligent triage, automated doctor matching, 
+            Streamline patient care with intelligent triage, automated doctor matching,
             and real-time resource optimization for enhanced hospital efficiency.
           </p>
           <div className="hero-actions">
@@ -84,7 +84,7 @@ const Home = () => {
       </section>
 
       {/* Workflow Section */}
-      <section className="workflow-section">
+      {/* <section className="workflow-section">
         <div className="section-header">
           <h2>Intelligent Patient Journey</h2>
           <p className="section-subtitle">Streamlined process from admission to discharge</p>
@@ -135,7 +135,7 @@ const Home = () => {
             <p>Smart bed management & treatment room assignment</p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Features Grid */}
       <section className="features-section">
@@ -235,7 +235,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="info-card hours">
             <div className="info-header">
               <Clock size={24} />
@@ -275,7 +275,7 @@ const Home = () => {
         <div className="cta-content">
           <h2>Transform Your Hospital Operations</h2>
           <p>
-            Join leading healthcare institutions using our AI-powered 
+            Join leading healthcare institutions using our AI-powered
             management system to deliver exceptional patient care.
           </p>
           <div className="cta-actions">

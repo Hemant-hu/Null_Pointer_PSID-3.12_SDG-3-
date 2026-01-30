@@ -53,6 +53,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
                     )}
                 </div>
             </div>
+
         </nav>
     );
 };
