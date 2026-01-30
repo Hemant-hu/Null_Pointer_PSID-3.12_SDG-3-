@@ -1,28 +1,36 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Staff = require("./Model/staff");
+const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
 
-// middleware
 app.use(express.json());
 
-// 🔗 MongoDB connection
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
+
 mongoose
   .connect("mongodb://127.0.0.1:27017/hospitalDB")
-  .then(() => {
-    console.log("MongoDB connected successfully ✅");
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error ❌", err);
-  });
+  .then(() => console.log("MongoDB connected ✅"))
+  .catch((err) => console.error(err));
 
-// route
-app.get("/", (req, res) => {
-  res.send("Server is running 🚀");
+// routes
+app.get("/staff", async (req, res) => {
+  const staff = await Staff.find();
+  res.json(staff);
 });
 
-// start server
+app.post("/staff", async (req, res) => {
+  const staff = new Staff(req.body);
+  await staff.save();
+  res.json(staff);
+});
+
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Backend running at http://localhost:${PORT}`);
 });
