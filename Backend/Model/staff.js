@@ -1,73 +1,57 @@
 const mongoose = require("mongoose");
 
+// 🔗 MongoDB connection
+
+
+// Schema
 const staffSchema = new mongoose.Schema(
   {
-    // Basic info
     name: {
       type: String,
       required: true,
       trim: true,
     },
-
     email: {
       type: String,
       required: true,
       unique: true,
-      lowercase: true,
     },
-
-    phone: {
-      type: String,
-      required: true,
-    },
-
-    password: {
-      type: String,
-      required: true,
-    },
-
-    // Role of staff
     role: {
       type: String,
-      enum: ["receptionist", "nurse", "doctor", "admin"],
+      enum: ["receptionist", "doctor"],
       required: true,
     },
-
-    // Hospital related info
+    employeeId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     department: {
       type: String,
       default: "General",
     },
-
-    employeeId: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-
-    // Address
-    address: {
-      street: String,
-      city: String,
-      state: String,
-      pincode: String,
-    },
-
-    // Status
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-
-    // Audit info
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Staff", // admin who created this staff
-    },
   },
-  {
-    timestamps: true, // createdAt & updatedAt
-  }
+  { timestamps: true }
 );
 
-module.exports = mongoose.model("Staff", staffSchema);
+const Staff = mongoose.model("Staff", staffSchema);
+
+// 🔽 Add data function
+async function addData() {
+  try {
+    const staff = new Staff({
+      name: "Anita Verma",
+      email: "anita@gmail.com",
+      role: "receptionist",
+      employeeId: "EMP102",
+    });
+
+    await staff.save();
+    console.log("Staff saved successfully ✅");
+  } catch (err) {
+    console.error("Error saving staff ❌", err.message);
+  }
+}
+// addData();
+
+module.exports = Staff;
