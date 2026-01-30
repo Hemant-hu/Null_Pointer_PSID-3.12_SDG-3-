@@ -42,6 +42,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
                             <span className="nav-username">Hello, {username}</span> {/* ⭐ Show username */}
                             <Link to="/new-patient" className="nav-link">New Patient</Link>
                             <Link to="/doctor" className="nav-link">Doctors</Link>
+                            <Link to="/queue" className="nav-link">Cheack Queue</Link>
                             <button onClick={handleLogout} className="nav-logout-btn">
                                 Logout
                             </button>

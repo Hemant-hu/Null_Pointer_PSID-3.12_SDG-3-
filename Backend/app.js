@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Staff = require("./Model/staff");
 const Doctor = require("./Model/Doctor");
 const cors = require("cors");
+const PatientAssessment = require("./Model/Queue");
 
 const app = express();
 const PORT = 3000;
@@ -32,6 +33,10 @@ app.post("/staff", async (req, res) => {
     res.json(staff);
 });
 
+app.post("/predict", async (req, res) => {
+    console.log(req.body);
+});
+
 app.post("/login", async (req, res) => {
     const { name } = req.body;
     console.log(name);
@@ -56,62 +61,69 @@ app.post("/login", async (req, res) => {
     }
 });
 
+
+
 app.post("/patients/register", async (req, res) => {
     try {
-        const patient = req.body;
-        console.log("Patient registration data:", patient);
+        console.log("Received patient assessment:", req.body);
 
-        // 🔢 Priority calculation
-        let score = 50;
-
-        // Age factor
-        const age = parseInt(patient.age) || 0;
-        if (age > 60) score += 20;
-        if (age > 80) score += 10;
-
-        // Severity
-        if (patient.severity === "high") score += 40;
-        if (patient.severity === "critical") score += 70;
-        if (patient.severity === "low") score -= 20;
-
-        // Symptoms
-        const symptoms = (patient.symptoms || "").toLowerCase();
-        if (symptoms.includes("chest")) score += 30;
-        if (symptoms.includes("breath")) score += 25;
-        if (symptoms.includes("bleed")) score += 35;
-        if (symptoms.includes("unconscious")) score += 50;
-
-        // Vitals
-        const hr = parseInt(patient.vitals?.heartRate) || 80;
-        if (hr < 60 || hr > 100) score += 15;
-
-        const temp = parseFloat(patient.vitals?.temperature) || 98.6;
-        if (temp > 100) score += 10;
-
-        const oxygen = parseInt(patient.vitals?.oxygenLevel) || 98;
-        if (oxygen < 95) score += 20;
-        if (oxygen < 90) score += 30;
-
-        // Clamp score
-        score = Math.max(0, Math.min(200, score));
-
-        // 🟢 TODO: Save patient + score to DB here
-        // await Patient.create({ ...patient, priorityScore: score });
+        const assessment = await PatientAssessment.create(req.body);
 
         res.status(201).json({
-            success: true,
-            priorityScore: Math.round(score),
-            message: "Patient registered successfully",
+            message: "Patient assessment saved successfully",
+            priority: assessment.priority,
+            id: assessment._id,
         });
-
     } catch (error) {
-        console.error(error);
+        console.error("Save error:", error);
+
+        // 🔴 Validation error
+        if (error.name === "ValidationError") {
+            return res.status(400).json({
+                error: "Invalid patient data",
+                details: error.message,
+            });
+        }
+
         res.status(500).json({
-            success: false,
-            message: "Server error",
+            error: "Failed to save patient assessment",
         });
     }
 });
+
+app.get("/queue", async (req, res) => {
+    try {
+        const patients = await PatientAssessment.find().sort({
+            priority: 1,
+            createdAt: 1,
+        });
+
+        const queue = patients.map((p) => ({
+            _id: p._id,
+            username: p.username,
+            priority: p.priority,
+            patientData: p.patientData,
+            createdAt: p.createdAt,
+        }));
+
+        res.json({
+            success: true,
+            data: queue,
+        });
+    } catch (err) {
+        console.error("Queue error:", err);
+        res.status(500).json({ success: false });
+    }
+});
+
+
+
+
+
+
+
+
+
 
 
 app.get("/doctors", async (req, res) => {

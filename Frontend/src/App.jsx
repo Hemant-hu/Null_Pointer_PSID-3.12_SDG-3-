@@ -7,6 +7,8 @@ import Header from './components/Header';
 import './App.css';
 import Footer from './components/Footer';
 import DoctorPage from './pages/doctor';
+import KTASTriageForm from './pages/New';
+import Queue from './pages/Queue';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,8 +36,8 @@ function App() {
             path="/new-patient"
             element={
               <PrivateRoute isLoggedIn={isLoggedIn}>
-                <NewPatient />
-
+                {/* <NewPatient /> */}
+                <KTASTriageForm />
               </PrivateRoute>
             }
           />
@@ -44,6 +46,15 @@ function App() {
             element={
               <PrivateRoute isLoggedIn={isLoggedIn}>
                 <DoctorPage />
+
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/queue"
+            element={
+              <PrivateRoute isLoggedIn={isLoggedIn}>
+                <Queue />
 
               </PrivateRoute>
             }
