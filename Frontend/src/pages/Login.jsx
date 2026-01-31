@@ -22,7 +22,8 @@ const Login = () => {
         try {
             setIsLoading(true);
 
-            const response = await api.post("/login", { name });
+            const response = await api.post("/login", { name: name.trim() });
+
 
 
             /**

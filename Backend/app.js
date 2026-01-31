@@ -41,28 +41,47 @@ app.post("/predict", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-    const { name } = req.body;
-    console.log(name);
+    let { name } = req.body;
+
+    if (!name || !name.trim()) {
+        return res.status(400).json({
+            success: false,
+            message: "Name is required"
+        });
+    }
+
+    name = name.trim();
 
     try {
-        const staff = await Staff.findOne({ name: name });
+        const staff = await Staff.findOne({
+            name: { $regex: `^${name}$`, $options: "i" } // case-insensitive
+        });
 
         if (!staff) {
-            return res.status(401).json({ success: false, message: "Name not found" });
+            return res.status(401).json({
+                success: false,
+                message: "Name not found"
+            });
         }
 
-        res.json({
+        return res.json({
             success: true,
             user: {
                 name: staff.name,
                 role: staff.role,
                 id: staff._id,
-            },
+            }
         });
+
     } catch (err) {
-        res.status(500).json({ success: false, message: "Server error" });
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
     }
 });
+
 
 app.get("/add", async (req, res) => {
     const staff = new Staff({
