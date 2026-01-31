@@ -1,44 +1,84 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
+
 const Staff = require("./Model/staff");
 const Doctor = require("./Model/Doctor");
-const cors = require("cors");
 const PatientAssessment = require("./Model/Queue");
-const dotenv = require("dotenv");
+
 dotenv.config();
-const url = process.env.url;
 
 const app = express();
-const PORT = 3000;
 
+/* ============================
+   CONFIG
+============================ */
+const PORT = process.env.PORT || 3000;
+const MONGO_URL = process.env.url;
+
+if (!MONGO_URL) {
+    console.error("❌ MongoDB URL missing in environment variables");
+    process.exit(1);
+}
+
+/* ============================
+   MIDDLEWARE
+============================ */
 app.use(express.json());
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: "*", // 🔓 allow all for now (restrict later)
+        methods: ["GET", "POST", "PUT", "DELETE"],
     })
 );
 
+/* ============================
+   DATABASE CONNECTION
+============================ */
 mongoose
-    .connect(url)
-    .then(() => console.log("MongoDB connected ✅"))
-    .catch((err) => console.error(err));
+    .connect(MONGO_URL)
+    .then(() => console.log("✅ MongoDB connected"))
+    .catch((err) => {
+        console.error("❌ MongoDB connection failed:", err);
+        process.exit(1);
+    });
 
-// routes
+/* ============================
+   ROUTES
+============================ */
+
+// Health check (IMPORTANT for Render)
+app.get("/", (req, res) => {
+    res.send("Backend is running 🚀");
+});
+
+/* ---------- STAFF ---------- */
+
 app.get("/staff", async (req, res) => {
-    const staff = await Staff.find();
-    res.json(staff);
+    try {
+        const staff = await Staff.find();
+        res.json(staff);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch staff" });
+    }
 });
 
 app.post("/staff", async (req, res) => {
-    const staff = new Staff(req.body);
-    await staff.save();
-    res.json(staff);
+    try {
+        const staff = new Staff(req.body);
+        await staff.save();
+        res.status(201).json(staff);
+    } catch (err) {
+        if (err.code === 11000) {
+            return res.status(409).json({ error: "Duplicate staff entry" });
+        }
+        res.status(500).json({ error: "Failed to add staff" });
+    }
 });
 
-app.post("/predict", async (req, res) => {
-    console.log(req.body);
-});
+/* ---------- LOGIN ---------- */
 
 app.post("/login", async (req, res) => {
     let { name } = req.body;
@@ -46,7 +86,7 @@ app.post("/login", async (req, res) => {
     if (!name || !name.trim()) {
         return res.status(400).json({
             success: false,
-            message: "Name is required"
+            message: "Name is required",
         });
     }
 
@@ -54,61 +94,47 @@ app.post("/login", async (req, res) => {
 
     try {
         const staff = await Staff.findOne({
-            name: { $regex: `^${name}$`, $options: "i" } // case-insensitive
+            name: { $regex: `^${name}$`, $options: "i" },
         });
 
         if (!staff) {
             return res.status(401).json({
                 success: false,
-                message: "Name not found"
+                message: "Name not found",
             });
         }
 
-        return res.json({
+        res.json({
             success: true,
             user: {
                 name: staff.name,
                 role: staff.role,
                 id: staff._id,
-            }
+            },
         });
-
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({
+        console.error("Login error:", err);
+        res.status(500).json({
             success: false,
-            message: "Server error"
+            message: "Server error",
         });
     }
 });
 
-
-app.get("/add", async (req, res) => {
-    const staff = new Staff({
-        name: "Anita Verma",
-        email: "anita@gmail.com",
-        role: "receptionist",
-        employeeId: "EMP102",
-    });
-    await staff.save();
-    res.send("Staff added");
-});
+/* ---------- PATIENTS ---------- */
 
 app.post("/patients/register", async (req, res) => {
     try {
-        console.log("Received patient assessment:", req.body);
-
         const assessment = await PatientAssessment.create(req.body);
 
         res.status(201).json({
-            message: "Patient assessment saved successfully",
+            message: "Patient assessment saved",
             priority: assessment.priority,
             id: assessment._id,
         });
     } catch (error) {
-        console.error("Save error:", error);
+        console.error("Patient save error:", error);
 
-        // 🔴 Validation error
         if (error.name === "ValidationError") {
             return res.status(400).json({
                 error: "Invalid patient data",
@@ -129,17 +155,9 @@ app.get("/queue", async (req, res) => {
             createdAt: 1,
         });
 
-        const queue = patients.map((p) => ({
-            _id: p._id,
-            username: p.username,
-            priority: p.priority,
-            patientData: p.patientData,
-            createdAt: p.createdAt,
-        }));
-
         res.json({
             success: true,
-            data: queue,
+            data: patients,
         });
     } catch (err) {
         console.error("Queue error:", err);
@@ -147,23 +165,20 @@ app.get("/queue", async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
-
-
+/* ---------- DOCTORS ---------- */
 
 app.get("/doctors", async (req, res) => {
-    const doctors = await Doctor.find();
-    res.json(doctors);
+    try {
+        const doctors = await Doctor.find();
+        res.json(doctors);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch doctors" });
+    }
 });
 
-
-
+/* ============================
+   SERVER START
+============================ */
 app.listen(PORT, () => {
-    console.log(`Backend running at http://localhost:${PORT}`);
+    console.log(`🚀 Backend running on port ${PORT}`);
 });
