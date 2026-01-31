@@ -267,6 +267,7 @@ const NewPatient = () => {
 
     return (
         <div className="new-patient-container">
+
             <div className="patient-header">
                 <h1>
                     <span className="header-icon">👤</span>

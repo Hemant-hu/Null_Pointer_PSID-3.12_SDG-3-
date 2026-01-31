@@ -58,7 +58,7 @@ const Login = () => {
             <div className="login-card">
                 <div className="login-header">
                     <div className="login-logo">
-                        <span className="logo-icon">🏥</span>
+                      
                         <h2>Staff Login</h2>
                     </div>
                     <p className="login-subtitle">Access the Hospital Management System</p>

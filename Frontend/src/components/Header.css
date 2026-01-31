@@ -2,7 +2,7 @@
   background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
   color: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  position: sticky;
+ position: relative;
   top: 0;
   z-index: 1000;
 }
