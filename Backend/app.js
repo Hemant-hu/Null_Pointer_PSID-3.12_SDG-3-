@@ -4,6 +4,9 @@ const Staff = require("./Model/staff");
 const Doctor = require("./Model/Doctor");
 const cors = require("cors");
 const PatientAssessment = require("./Model/Queue");
+const dotenv = require("dotenv");
+dotenv.config();
+const url = process.env.url;
 
 const app = express();
 const PORT = 3000;
@@ -17,7 +20,7 @@ app.use(
 );
 
 mongoose
-    .connect("mongodb://127.0.0.1:27017/hospitalDB")
+    .connect(url)
     .then(() => console.log("MongoDB connected ✅"))
     .catch((err) => console.error(err));
 
@@ -61,7 +64,16 @@ app.post("/login", async (req, res) => {
     }
 });
 
-
+app.get("/add", async (req, res) => {
+    const staff = new Staff({
+        name: "Anita Verma",
+        email: "anita@gmail.com",
+        role: "receptionist",
+        employeeId: "EMP102",
+    });
+    await staff.save();
+    res.send("Staff added");
+});
 
 app.post("/patients/register", async (req, res) => {
     try {
