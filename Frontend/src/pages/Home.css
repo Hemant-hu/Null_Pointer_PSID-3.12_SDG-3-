@@ -7,7 +7,7 @@
 
 /* Hero Section */
 .hero-section {
-  background-image: url("C:\Users\Dipesh Padole\OneDrive\Desktop\PS32\CIH_Null_Pointers\Frontend\src\home.jpeg");
+  background-image: url("home.jpeg");
   background-size: cover;
   font-family: sans-serif;
   background-position: center;
