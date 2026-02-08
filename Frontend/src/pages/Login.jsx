@@ -23,10 +23,7 @@ const Login = () => {
         try {
             setIsLoading(true);
 
-            const response = await api.post("/login", {
-                name,
-                password,
-            });
+            const response = await api.post("/login", { name: name.trim() });
 
             /**
              * Expected backend response:
@@ -59,7 +56,6 @@ const Login = () => {
             <div className="login-card">
                 <div className="login-header">
                     <div className="login-logo">
-                        <span className="logo-icon"></span>
                         <h2>Staff Login</h2>
                     </div>
                     <p className="login-subtitle">

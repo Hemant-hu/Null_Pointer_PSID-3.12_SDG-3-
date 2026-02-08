@@ -26,12 +26,12 @@ const Home = () => {
           <div className="badge">
             <Shield size={16} />
             <span>AI-Powered Healthcare</span>
+            <br />
+            <br />
           </div>
           <h1>Advanced Hospital <span className="gradient-text">Management System</span></h1>
-          {/* <p className="hero-subtitle">
-            Streamline patient care with intelligent triage, automated doctor matching,
-            and real-time resource optimization for enhanced hospital efficiency.
-          </p> */}
+          <br />
+          <br />
           <div className="hero-actions">
             <Link to="/login" className="hero-btn primary">
               <span>Staff Portal</span>
@@ -59,29 +59,10 @@ const Home = () => {
             </div>
           </div>
         </div>
-        {/* <div className="hero-visual">
-          <div className="dashboard-preview">
-            <div className="dashboard-header">
-              <div className="dashboard-title">Live Patient Queue</div>
-              <div className="dashboard-status active"></div>
-            </div>
-            <div className="dashboard-content">
-              <div className="queue-item priority-high">
-                <div className="queue-badge">Priority 1</div>
-                <div className="queue-info">Cardiac Emergency</div>
-              </div>
-              <div className="queue-item priority-medium">
-                <div className="queue-badge">Priority 2</div>
-                <div className="queue-info">Fracture Case</div>
-              </div>
-              <div className="queue-item priority-low">
-                <div className="queue-badge">Priority 3</div>
-                <div className="queue-info">General Consultation</div>
-              </div>
-            </div>
-          </div>
-        </div> */}
+      
       </section>
+      <br />
+      <br />
 
       {/* Workflow Section */}
       {/* <section className="workflow-section">
@@ -137,8 +118,13 @@ const Home = () => {
         </div>
       </section> */}
 
+<<<<<<< HEAD
       
       {/* <section className="features-section">
+=======
+      {/* Features Grid
+      <section className="features-section">
+>>>>>>> ad12f0cc6a356378d5b4b122ca44ec42f76018d7
         <div className="section-header">
           <h2>Advanced Care Features</h2>
           <p className="section-subtitle">Comprehensive solutions for modern healthcare</p>

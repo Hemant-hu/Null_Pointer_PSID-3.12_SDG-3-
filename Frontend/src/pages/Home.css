@@ -7,7 +7,7 @@
 
 /* Hero Section */
 .hero-section {
-  background-image: url("C:\Users\Himesh\OneDrive\Desktop\New folder\Null_Pointer_PSID-3.12_SDG-3-\Frontend\src\photo.jpeg");
+  background-image: url("home.jpeg");
   background-size: cover;
   font-family: sans-serif;
   background-position: center;
@@ -59,10 +59,11 @@
 
 .hero-subtitle {
   font-size: 1.125rem;
-  color: #01050a;
+  color: black;
   line-height: 1.6;
   margin-bottom: 2.5rem;
   max-width: 90%;
+
 }
 
 .hero-actions {
@@ -190,9 +191,20 @@
 }
 
 @keyframes pulse {
-  0% { transform: scale(0.8); opacity: 0.5; }
-  50% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(0.8); opacity: 0.5; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
 }
 
 .dashboard-content {
@@ -218,9 +230,17 @@
   color: white;
 }
 
-.queue-item.priority-high .queue-badge { background: #ef4444; }
-.queue-item.priority-medium .queue-badge { background: #f59e0b; }
-.queue-item.priority-low .queue-badge { background: #10b981; }
+.queue-item.priority-high .queue-badge {
+  background: #ef4444;
+}
+
+.queue-item.priority-medium .queue-badge {
+  background: #f59e0b;
+}
+
+.queue-item.priority-low .queue-badge {
+  background: #10b981;
+}
 
 .queue-info {
   font-size: 0.875rem;
@@ -632,16 +652,16 @@
     grid-template-columns: 1fr;
     gap: 3rem;
   }
-  
+
   .hero-content h1 {
     font-size: 2.5rem;
   }
-  
+
   .workflow-steps {
     flex-wrap: wrap;
     gap: 3rem;
   }
-  
+
   .step-connector {
     display: none;
   }
@@ -651,46 +671,46 @@
   .home-container {
     padding: 1rem;
   }
-  
+
   .hero-section {
     padding: 2rem;
   }
-  
+
   .hero-content h1 {
     font-size: 2rem;
   }
-  
+
   .hero-actions {
     flex-direction: column;
   }
-  
+
   .hero-stats {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .stat-divider {
     width: 100px;
     height: 1px;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
     padding: 0;
   }
-  
+
   .info-container {
     grid-template-columns: 1fr;
   }
-  
+
   .cta-section {
     padding: 2rem;
   }
-  
+
   .cta-content h2 {
     font-size: 2rem;
   }
-  
+
   .cta-actions {
     flex-direction: column;
   }

@@ -8,19 +8,15 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
-        
+
         {/* Main Footer Content */}
-        
-        
+
+
 
         {/* Bottom Footer */}
-        
-          <div className="copyright">
-            <p>© {currentYear} SmartCare Hospital System. All rights reserved.</p>
-           
-          
-          
-         
+
+        <div className="copyright">
+          <p>© {currentYear} SmartCare Hospital System. All rights reserved.</p>
         </div>
 
       </div>

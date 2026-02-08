@@ -33,8 +33,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Error Alert */
@@ -53,6 +60,7 @@
     transform: translateY(-10px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -286,19 +294,19 @@
   .doctor-page {
     padding: 1rem;
   }
-  
+
   .doctor-page h1 {
     font-size: 2rem;
   }
-  
+
   .doctors-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .doctor-actions {
     flex-direction: column;
   }
-  
+
   .add-doctor-form {
     padding: 1.5rem;
   }
@@ -308,11 +316,11 @@
   .doctor-page h1 {
     font-size: 1.8rem;
   }
-  
+
   .doctor-card {
     padding: 1rem;
   }
-  
+
   .doctor-info h3 {
     font-size: 1.2rem;
   }
@@ -324,6 +332,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
