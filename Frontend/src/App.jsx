@@ -35,7 +35,7 @@ function App() {
           <Route
             path="/new-patient"
             element={
-              <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PrivateRoute isLoggedIn={true}>
                 {/* <NewPatient /> */}
                 <KTASTriageForm />
               </PrivateRoute>
@@ -44,7 +44,7 @@ function App() {
           <Route
             path="/doctor"
             element={
-              <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PrivateRoute isLoggedIn={true}>
                 <DoctorPage />
 
               </PrivateRoute>
@@ -53,7 +53,7 @@ function App() {
           <Route
             path="/queue"
             element={
-              <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PrivateRoute isLoggedIn={true}>
                 <Queue />
 
               </PrivateRoute>

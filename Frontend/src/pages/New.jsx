@@ -441,8 +441,10 @@ export default function KTASTriageMini() {
 
             <style jsx>{`
                 .ktas-container {
+                    margin: 0px auto;
+                    
                     max-width: 900px;
-                    margin: 0 auto;
+                    
                     padding: 24px;
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                     background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
@@ -657,11 +659,11 @@ export default function KTASTriageMini() {
                 .btn-clear {
                     background: #f8f9fa;
                     color: #5d6d7e;
-                    border: 1px solid #d5dbdb;
+                    border: 1px solid #dC2626;
                 }
                 
                 .btn-clear:hover:not(:disabled) {
-                    background: #eaecee;
+                    background: #fee2e2;
                 }
                 
                 .btn-submit {

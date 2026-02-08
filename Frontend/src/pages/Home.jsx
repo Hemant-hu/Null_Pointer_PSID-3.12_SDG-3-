@@ -28,10 +28,10 @@ const Home = () => {
             <span>AI-Powered Healthcare</span>
           </div>
           <h1>Advanced Hospital <span className="gradient-text">Management System</span></h1>
-          <p className="hero-subtitle">
+          {/* <p className="hero-subtitle">
             Streamline patient care with intelligent triage, automated doctor matching,
             and real-time resource optimization for enhanced hospital efficiency.
-          </p>
+          </p> */}
           <div className="hero-actions">
             <Link to="/login" className="hero-btn primary">
               <span>Staff Portal</span>
@@ -59,7 +59,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="hero-visual">
+        {/* <div className="hero-visual">
           <div className="dashboard-preview">
             <div className="dashboard-header">
               <div className="dashboard-title">Live Patient Queue</div>
@@ -80,7 +80,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </section>
 
       {/* Workflow Section */}
@@ -137,8 +137,8 @@ const Home = () => {
         </div>
       </section> */}
 
-      {/* Features Grid */}
-      <section className="features-section">
+      
+      {/* <section className="features-section">
         <div className="section-header">
           <h2>Advanced Care Features</h2>
           <p className="section-subtitle">Comprehensive solutions for modern healthcare</p>
@@ -193,10 +193,10 @@ const Home = () => {
             </ul>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Hospital Info */}
-      <section className="hospital-info-section">
+      {/* <section className="hospital-info-section">
         <div className="info-container">
           <div className="info-card location">
             <div className="info-header">
@@ -268,10 +268,10 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
-      <section className="cta-section">
+      {/* <section className="cta-section">
         <div className="cta-content">
           <h2>Transform Your Hospital Operations</h2>
           <p>
@@ -288,7 +288,7 @@ const Home = () => {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

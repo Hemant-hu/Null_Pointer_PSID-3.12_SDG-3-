@@ -25,9 +25,9 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
     return (
         <nav className="navbar">
             <div className="nav-container">
-                {/* Logo */}
+                
                 <Link to="/" className="nav-logo">
-                    <span className="logo-icon">🏥</span>
+                    {/* <span className="logo-icon"> </span> */}
                     <div className="logo-text">
                         <h1>SmartCare Hospital</h1>
                         <p className="logo-subtitle">AI-Powered Management System</p>

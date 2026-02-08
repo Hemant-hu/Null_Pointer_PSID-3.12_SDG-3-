@@ -5,6 +5,7 @@ import api from "../api/api";
 
 const Login = () => {
     const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
@@ -14,16 +15,18 @@ const Login = () => {
         e.preventDefault();
         setError("");
 
-        if (!name) {
-            setError("Please enter your name");
+        if (!name || !password) {
+            setError("Please enter name and password");
             return;
         }
 
         try {
             setIsLoading(true);
 
-            const response = await api.post("/login", { name });
-
+            const response = await api.post("/login", {
+                name,
+                password,
+            });
 
             /**
              * Expected backend response:
@@ -37,12 +40,11 @@ const Login = () => {
                 // Store only the name
                 localStorage.setItem("user", response.data.user.name);
 
-                // ⭐ Print the stored username
                 console.log("Logged in username:", localStorage.getItem("user"));
 
                 window.location.href = "/";
             } else {
-                setError("Name not found");
+                setError("Invalid name or password");
             }
 
         } catch (err) {
@@ -57,16 +59,18 @@ const Login = () => {
             <div className="login-card">
                 <div className="login-header">
                     <div className="login-logo">
-                        <span className="logo-icon">🏥</span>
+                        <span className="logo-icon"></span>
                         <h2>Staff Login</h2>
                     </div>
-                    <p className="login-subtitle">Access the Hospital Management System</p>
+                    <p className="login-subtitle">
+                        Access the Hospital Management System
+                    </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="login-form">
                     {error && <div className="error-message">⚠️ {error}</div>}
 
-                    {/* Name input */}
+                    {/* Name */}
                     <div className="form-group">
                         <label htmlFor="name">Name</label>
                         <input
@@ -80,17 +84,37 @@ const Login = () => {
                         />
                     </div>
 
-                    <button type="submit" className="login-btn" disabled={isLoading}>
+                    {/* Password */}
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter your password"
+                            disabled={isLoading}
+                            required
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="login-btn"
+                        disabled={isLoading}
+                    >
                         {isLoading ? "Logging in..." : "Login"}
                     </button>
 
                     <div className="demo-info">
-                        <p>Demo Name: <strong>Anita Verma</strong></p>
+                        <p>
+                            Demo: <strong>Anita Verma</strong> / <strong>123456</strong>
+                        </p>
                     </div>
                 </form>
 
                 <div className="login-footer">
-                    <p>← Back to Home</p>
+                   <a href="/">← Back to Home</a>
                 </div>
             </div>
         </div>

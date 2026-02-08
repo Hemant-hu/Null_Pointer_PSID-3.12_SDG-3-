@@ -7,12 +7,16 @@
 
 /* Hero Section */
 .hero-section {
+  background-image: url("C:\Users\Himesh\OneDrive\Desktop\New folder\Null_Pointer_PSID-3.12_SDG-3-\Frontend\src\photo.jpeg");
+  background-size: cover;
+  font-family: sans-serif;
+  background-position: center;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
   margin-bottom: 6rem;
   padding: 3rem;
-  background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+  /* background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%); */
   border-radius: 24px;
   border: 1px solid rgba(26, 115, 232, 0.1);
   box-shadow: 0 20px 40px rgba(0, 100, 200, 0.08);
@@ -55,13 +59,14 @@
 
 .hero-subtitle {
   font-size: 1.125rem;
-  color: #64748b;
+  color: #01050a;
   line-height: 1.6;
   margin-bottom: 2.5rem;
   max-width: 90%;
 }
 
 .hero-actions {
+  margin-top: 40px;
   display: flex;
   gap: 1rem;
   margin-bottom: 3rem;
@@ -92,13 +97,13 @@
 }
 
 .hero-btn.secondary {
-  background: white;
-  color: #1a73e8;
-  border-color: #1a73e8;
+  background: #D9432E;
+  color: #FFFFFF;
+  border-color: #D9432E;
 }
 
 .hero-btn.secondary:hover {
-  background: #1a73e8;
+  background: #BC3624;
   color: white;
   transform: translateY(-2px);
 }

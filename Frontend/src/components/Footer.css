@@ -1,14 +1,12 @@
 .footer {
     background: linear-gradient(135deg, #0d47a1 0%, #1a73e8 100%);
     color: white;
-    margin-top: auto;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.footer-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 3rem 2rem 1.5rem;
-}
 
 /* Footer Content */
 .footer-content {
@@ -40,6 +38,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.footer-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .footer-logo-text h3 {
@@ -200,7 +203,7 @@
 /* Footer Bottom */
 .footer-bottom {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;

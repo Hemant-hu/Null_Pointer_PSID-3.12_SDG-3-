@@ -1,5 +1,6 @@
 .navbar {
-  background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+  margin-bottom: 50px;
+  background: #FFFFFF;
   color: white;
   padding: 0.8rem 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -22,21 +23,25 @@
   align-items: center;
   gap: 1rem;
   text-decoration: none;
-  color: white;
+  color: #1E3A8A;
 }
 
 .logo-icon {
-  font-size: 2.2rem;
+  background-image: url("C:\Users\Himesh\OneDrive\Desktop\New folder\Null_Pointer_PSID-3.12_SDG-3-\Frontend\src\logo.jpeg");
+  width: 80px;
+  height: 80px;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .logo-text h1 {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
   margin: 0;
 }
 
 .logo-subtitle {
-  font-size: 0.8rem;
+  font-size: 1 rem;
   opacity: 0.9;
   margin: 0;
 }
@@ -48,10 +53,12 @@
 }
 
 .nav-link {
-  color: white;
+  margin-right: 50px;
+  
+  color: #1E3A8A;
   text-decoration: none;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 1.5rem;
   padding: 0.5rem 0;
   position: relative;
   transition: opacity 0.3s;
